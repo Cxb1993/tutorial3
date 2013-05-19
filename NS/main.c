@@ -73,17 +73,19 @@ int main(int argc, char** argv){
 	double GX,GY;		/* external forces gx; gy, e.g. gravity*/
 	double UI,VI,PI;	/* initial data for velocities and pressure*/
 	/* Arrays*/
-	double **U;		/* velocity in x-direction*/
-	double **V;		/* velocity in y-direction*/
-	double **P;		/* pressure*/
+	double **U;			/* velocity in x-direction*/
+	double **V;			/* velocity in y-direction*/
+	double **P;			/* pressure*/
 	double **RS;		/* right-hand side for pressure iteration*/
 	double **F,**G;		/* F;G*/
-	int n_div;
-	int wl;						/* boundary type for left wall (1:no-slip 2: free-slip 3: outflow) */
-	int wr;						/* boundary type for right wall (1:no-slip 2: free-slip 3: outflow) */
-	int wt;						/* boundary type for top wall (1:no-slip 2: free-slip 3: outflow) */
-	int wb;						/* boundary type for bottom wall (1:no-slip 2: free-slip 3: outflow) */
+	int **Flag; 		/* Flag field used to classify fluid cells*/
+	/*Boundary values*/
+	int wl;				/* boundary type for left wall (1:no-slip 2: free-slip 3: outflow) */
+	int wr;				/* boundary type for right wall (1:no-slip 2: free-slip 3: outflow) */
+	int wt;				/* boundary type for top wall (1:no-slip 2: free-slip 3: outflow) */
+	int wb;				/* boundary type for bottom wall (1:no-slip 2: free-slip 3: outflow) */
 	char problem[80];
+	int n_div;
 
 	/* read the program configuration file using read_parameters()*/
 	read_parameters(&Re, &UI, &VI, &PI, &GX, &GY, &t_end, &xlength, &ylength, &dt, &dx, &dy, &imax,
@@ -97,6 +99,7 @@ int main(int argc, char** argv){
 	RS = matrix(0, imax+1, 0, jmax+1);
 	F = matrix(0, imax+1, 0, jmax+1);
 	G = matrix(0, imax+1, 0, jmax+1);
+	Flag = imatrix(0, imax+1, 0, jmax+1);
 
 	/* initialize current time and time step*/
 	t = 0;
@@ -104,7 +107,7 @@ int main(int argc, char** argv){
 
 	/* create the initial setup init_uvp()*/
 	init_uvp(UI, VI, PI, imax, jmax, U, V, P);
-
+	init_flag(problem, imax, jmax, Flag);
 
 	/* ----------------------------------------------------------------------- */
 	/*                             Performing the main loop                    */
@@ -148,7 +151,6 @@ int main(int argc, char** argv){
 
 	}
 
-
 	/* Destroy memory allocated*/
 	free_matrix(U, 0, imax+1, 0, jmax+1);
 	free_matrix(V, 0, imax+1, 0, jmax+1);
@@ -156,5 +158,6 @@ int main(int argc, char** argv){
 	free_matrix(RS, 0, imax+1, 0, jmax+1);
 	free_matrix(F, 0, imax+1, 0, jmax+1);
 	free_matrix(G, 0, imax+1, 0, jmax+1);
+	free_imatrix(Flag, 0, imax+1, 0, jmax+1);
 	return -1;
 }

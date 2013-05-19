@@ -161,3 +161,80 @@ void init_uvp(
 	}
 
 }
+
+/* ----------------------------------------------------------------------- */
+/*                             Initializing Flag array                     */
+/* ----------------------------------------------------------------------- */
+
+/*The array Flag is initialized with the flags C_F for fluid cells and C_B for obstacle cells as
+specified by the parameter problem. This must be followed by a loop over all cells where
+the boundary cells are marked with the appropriate flags B_xy depending on the direction, in
+which neighboring fluid cells lie.*/
+void init_flag(
+		const char *problem,
+		int imax,
+		int jmax,
+		int **Flag){
+
+	char image[84];
+	int i, j;
+	strcpy(image, problem);
+	strcat(image, ".pgm");
+	Flag = read_pgm(image);
+
+	/* Outer boundaries will always be the same, so we assign those flags first*/
+	/* Corners: */
+	Flag[0][0]= 0;
+	Flag[imax+1][0]= 0;
+	Flag[0][jmax+1]= 0;
+	Flag[imax+1][jmax+1]= 0;
+
+	/* Left boundary: */
+	for(j = 1; j < jmax + 1; j++){
+		Flag[0][j]= B_O;
+	}
+
+	/* Right boundary: */
+	for(j = 1; j < jmax + 1; j++){
+		Flag[imax+1][j]= B_W;
+	}
+
+	/* Top boundary: */
+	for(i = 1; i < imax + 1; i++){
+		Flag[i][jmax+1]= B_S;
+	}
+
+	/* Bottom boundary: */
+	for(i = 1; i < imax + 1; i++){
+		Flag[i][0]= B_N;
+	}
+
+	/* Now loop over all inner cells checking the four neighbors (no corners)*/
+	for(i = 1; i < imax + 1; i++){
+		for(j = 1; j < jmax + 1; j++){
+			if(Flag[i][j]==C_F){
+				Flag[i][j] = B_C;
+			}
+			else{
+				Flag[i][j] = 0;
+			}
+		}
+		if(Flag[i-1][j]>=B_C){
+			Flag[i][j] |= B_W;
+		}
+		if(Flag[i+1][j]>=B_C){
+			Flag[i][j] |= B_O;
+		}
+		if(Flag[i][j+1]>=B_C){
+			Flag[i][j] |= B_N;
+		}
+		if(Flag[i][j-1]>=B_C){
+			Flag[i][j] |= B_S;
+		}
+		if(Flag[i][j]==3||Flag[i][j]==7||(Flag[i][j]>10&&Flag[i][j]<16)){
+			printf("\nERROR! The flag field contains a forbidden boundary cell at i= %i j= %i\n",i,j);
+		}
+	}
+}
+
+

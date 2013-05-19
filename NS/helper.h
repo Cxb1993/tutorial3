@@ -29,6 +29,25 @@
 #define OUTFLOW 3
 
 /**
+ * Define obstacle cells
+ */
+#define C_B 1
+#define C_F 255
+
+/**
+ * Boundary cell classification |center|east|west|south|north| (1 = fluid)
+ */
+#define B_N 1 	/* 0b00001*/
+#define B_S 2	/* 0b00010*/
+#define B_W 4	/* 0b00100*/
+#define B_O 8	/* 0b01000*/
+#define B_C 16	/* 0b01000*/
+#define B_NW 5	/* 0b00101*/
+#define B_NO 9	/* 0b01001*/
+#define B_SW 6	/* 0b00110*/
+#define B_SO 10	/* 0b01010*/
+
+/**
  * Stores the last timer value 
  */
 extern clock_t last_timer_reset;   

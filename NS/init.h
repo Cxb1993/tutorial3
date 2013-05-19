@@ -83,5 +83,14 @@ void init_uvp(
 		double **P
 );
 
+/*The array Flag is initialized with the flags C_F for fluid cells and C_B for obstacle cells as
+specified by the parameter problem. This must be followed by a loop over all cells where
+the boundary cells are marked with the appropriate flags B_xy depending on the direction, in
+which neighboring fluid cells lie.*/
+void init_flag(
+		const char *problem,
+		int imax,
+		int jmax,
+		int **Flag);
 #endif
 

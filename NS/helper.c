@@ -486,16 +486,16 @@ int **read_pgm(const char *filename)
     }
     for (i1 = 0; i1 < xsize+2; i1++)
     {
-        pic[i1][0] = 0;
+        pic[i1][0] = 1;
     }
     for (i1 = 0; i1 < xsize+2; i1++)
     {
-        pic[i1][ysize+1] = 0;
+        pic[i1][ysize+1] = 1;
     }
     for (j1 = 0; j1 < ysize+2; j1++)
     {
-        pic[0][j1] = 0;
-        pic[xsize+1][j1] = 0;
+        pic[0][j1] = 1;
+        pic[xsize+1][j1] = 1;
     }
     
     /* close file */
