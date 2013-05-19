@@ -66,27 +66,27 @@ int read_parameters(double *Re,                /* reynolds number   */
 		int  *itermax,             /* max. number of iterations  */
 		/* for pressure per time step */
 		double *eps,               /* accuracy bound for pressure*/
-		double *dt_value			/* time for output */	
-		int *wl						/* boundary type for left wall (1:no-slip 2: free-slip 3: outflow) */
-		int *wr						/* boundary type for right wall (1:no-slip 2: free-slip 3: outflow) */
-		int *wt						/* boundary type for top wall (1:no-slip 2: free-slip 3: outflow) */
-		int *wb						/* boundary type for bottom wall (1:no-slip 2: free-slip 3: outflow) */
-		char *problem               /* name of problem */
+		double *dt_value,			/* time for output */
+		int *wl,						/* boundary type for left wall (1:no-slip 2: free-slip 3: outflow) */
+		int *wr,						/* boundary type for right wall (1:no-slip 2: free-slip 3: outflow) */
+		int *wt,						/* boundary type for top wall (1:no-slip 2: free-slip 3: outflow) */
+		int *wb,						/* boundary type for bottom wall (1:no-slip 2: free-slip 3: outflow) */
+		char *problem,               /* name of problem */
 		int argc,
 		char *argv
 )           
 {
-	char * szFileName;
+	char szFileName[80];
 	strcpy(szFileName, argv);
 	strcat(szFileName, ".dat");
 
 	if(argc==2){
-		READ_DOUBLE( szFilename, *xlength );
-		READ_DOUBLE( szFilename, *ylength );
+		READ_DOUBLE( szFileName, *xlength );
+		READ_DOUBLE( szFileName, *ylength );
 
-		READ_DOUBLE( szFilename, *Re    );
-		READ_DOUBLE( szFilename, *t_end );
-		READ_DOUBLE( szFilename, *dt    );
+		READ_DOUBLE( szFileName, *Re    );
+		READ_DOUBLE( szFileName, *t_end );
+		READ_DOUBLE( szFileName, *dt    );
 
 		READ_INT   ( szFileName, *imax );
 		READ_INT   ( szFileName, *jmax );
