@@ -115,7 +115,7 @@ int main(int argc, char** argv){
 		/*	Select dt*/
 		calculate_dt(Re, tau, &dt, dx, dy, imax, jmax, U, V);
 		/*	Set boundary values for u and v according to (14),(15)*/
-		boundaryvalues(imax, jmax, U, V);
+		boundaryvalues(imax, jmax, U, V, wl, wr, wt, wb);
 		/*	Compute F(n) and G(n) according to (9),(10),(17)*/
 		calculate_fg(Re, GX, GY, alpha, dt, dx, dy, imax, jmax, U, V ,F , G);
 		/*	Compute the right-hand side rs of the pressure equation (11)*/
@@ -137,7 +137,7 @@ int main(int argc, char** argv){
 
 		n_div=(dt_value/dt);
 		if(n % n_div == 0){
-			write_vtkFile("cavity100", n , xlength, ylength, imax, jmax, dx, dy, U, V, P);
+			write_vtkFile(problem, n , xlength, ylength, imax, jmax, dx, dy, U, V, P);
 		}
 		/*	t := t + dt*/
 		t = t + dt;
