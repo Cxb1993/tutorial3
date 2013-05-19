@@ -19,7 +19,14 @@
 /**
  * Maximum length of input lines 
  */
-#define MAX_LINE_LENGTH 1024	   
+#define MAX_LINE_LENGTH 1024
+
+/**
+ * Define boundary conditions
+ */
+#define NO_SLIP 1
+#define FREE_SLIP 2
+#define OUTFLOW 3
 
 /**
  * Stores the last timer value 
