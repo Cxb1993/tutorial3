@@ -191,22 +191,29 @@ void init_flag(
 
 	/* Left boundary: */
 	for(j = 1; j < jmax + 1; j++){
-		Flag[0][j]= B_O;
+		if(Flag[i+1][j]>=B_C){
+			Flag[0][j] |= B_O;
+		}
 	}
 
 	/* Right boundary: */
 	for(j = 1; j < jmax + 1; j++){
-		Flag[imax+1][j]= B_W;
+		if(Flag[i-1][j]>=B_C){
+			Flag[imax+1][j] |= B_W;
+		}
 	}
 
 	/* Top boundary: */
 	for(i = 1; i < imax + 1; i++){
-		Flag[i][jmax+1]= B_S;
-	}
+		if(Flag[i][j-1]>=B_C){
+			Flag[i][jmax+1] |= B_S;
+		}	}
 
 	/* Bottom boundary: */
 	for(i = 1; i < imax + 1; i++){
-		Flag[i][0]= B_N;
+		if(Flag[i][j+1]>=B_C){
+			Flag[i][0] |= B_N;
+		}
 	}
 
 	/* Now loop over all inner cells checking the four neighbors (no corners)*/
@@ -218,21 +225,21 @@ void init_flag(
 			else{
 				Flag[i][j] = 0;
 			}
-		}
-		if(Flag[i-1][j]>=B_C){
-			Flag[i][j] |= B_W;
-		}
-		if(Flag[i+1][j]>=B_C){
-			Flag[i][j] |= B_O;
-		}
-		if(Flag[i][j+1]>=B_C){
-			Flag[i][j] |= B_N;
-		}
-		if(Flag[i][j-1]>=B_C){
-			Flag[i][j] |= B_S;
-		}
-		if(Flag[i][j]==3||Flag[i][j]==7||(Flag[i][j]>10&&Flag[i][j]<16)){
-			printf("\nERROR! The flag field contains a forbidden boundary cell at i= %i j= %i\n",i,j);
+			if(Flag[i-1][j]>=B_C){
+				Flag[i][j] |= B_W;
+			}
+			if(Flag[i+1][j]>=B_C){
+				Flag[i][j] |= B_O;
+			}
+			if(Flag[i][j+1]>=B_C){
+				Flag[i][j] |= B_N;
+			}
+			if(Flag[i][j-1]>=B_C){
+				Flag[i][j] |= B_S;
+			}
+			if(Flag[i][j]==3||Flag[i][j]==7||(Flag[i][j]>10&&Flag[i][j]<16)){
+				printf("\nERROR! The flag field contains a forbidden boundary cell at i= %i j= %i\n",i,j);
+			}
 		}
 	}
 }
