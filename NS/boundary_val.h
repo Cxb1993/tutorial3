@@ -13,7 +13,8 @@ void boundaryvalues(
 		const int wl,
 		const int wr,
 		const int wt,
-		const int wb
+		const int wb,
+		int **Flag
 );
 /**
  * Function to set special boundary values.

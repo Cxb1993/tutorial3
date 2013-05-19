@@ -16,7 +16,8 @@ void boundaryvalues(
 		const int wl,
 		const int wr,
 		const int wt,
-		const int wb
+		const int wb,
+		int **Flag
 ) {
 
 	int i,j;
@@ -121,6 +122,59 @@ void boundaryvalues(
 	default:
 		break;
 	}
+
+	/**
+	 * Loop to check for boundary cells in the inner domain
+	 */
+	for(i = 1; i < imax+1; i++){
+		for(j = 1; j < jmax+1; j++){
+			if(Flag[i][j]==B_N){
+				V[i][j]=0;
+				U[i-1][j]=-1*U[i-1][j+1];
+				U[i][j]=-1*U[i][j+1];
+			}
+			else if(Flag[i][j]==B_S){
+				V[i][j-1]=0;
+				U[i-1][j]=-1*U[i-1][j-1];
+				U[i][j]=-1*U[i][j-1];
+			}
+			else if(Flag[i][j]==B_W){
+				U[i-1][j]=0;
+				V[i][j-1]=-1*V[i-1][j-1];
+				V[i][j]=-1*V[i-1][j];
+			}
+			else if(Flag[i][j]==B_O){
+				U[i][j]=0;
+				V[i][j-1]=-1*V[i+1][j-1];
+				V[i][j]=-1*V[i+1][j];
+			}
+			else if(Flag[i][j]==B_NO){
+				U[i][j]=0;
+				U[i-1][j]=-1*U[i-1][j+1];
+				V[i][j]=0;
+				V[i][j-1]=-1*V[i+1][j-1];
+			}
+			else if(Flag[i][j]==B_NW){
+				U[i-1][j]=0;
+				U[i][j]=-1*U[i][j+1];
+				V[i][j]=0;
+				V[i][j-1]=-1*V[i-1][j-1];
+			}
+			else if(Flag[i][j]==B_SO){
+				U[i][j]=0;
+				U[i-1][j]=-1*U[i-1][j-1];
+				V[i][j-1]=0;
+				V[i][j]=-1*V[i+1][j];
+			}
+			else if(Flag[i][j]==B_SW){
+				U[i-1][j]=0;
+				U[i][j]=-1*U[i][j-1];
+				V[i][j]=-1*V[i-1][j];
+				V[i][j-1]=0;
+			}
+		}
+	}
+
 }
 
 void spec_boundary_val(
