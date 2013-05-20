@@ -137,12 +137,12 @@ int main(int argc, char** argv){
 			it++;
 		}
 		/*	Compute u(n+1) and v(n+1) according to (7),(8)*/
-		calculate_uv(dt, dx, dy, imax, jmax, U, V, F, G, P);
+		calculate_uv(dt, dx, dy, imax, jmax, U, V, F, G, P, Flag);
 		/*	Output of u; v; p values for visualization, if necessary*/
 
 		n_div=(dt_value/dt);
 		if(n % n_div == 0){
-			/*write_vtkFile(problem, n , xlength, ylength, imax, jmax, dx, dy, U, V, P);*/
+			write_vtkFile(problem, n , xlength, ylength, imax, jmax, dx, dy, U, V, P);
 		}
 		/*	t := t + dt*/
 		t = t + dt;

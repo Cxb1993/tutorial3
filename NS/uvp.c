@@ -251,20 +251,24 @@ void calculate_uv(
 		double **V,
 		double **F,
 		double **G,
-		double **P
+		double **P,
+		int **Flag
 ){
 	int i;
 	int j;
-	/*Calculate the new velocity U according to the formula above*/
-	for(i = 1; i <= (imax-1); i++){
-		for(j = 1; j <= jmax; j++){
-			U[i][j] = F[i][j]-(dt/dx)*(P[i+1][j]-P[i][j]);
-		}
-	}
-	/*Calculate the new velocity V according to the formula above*/
 	for(i = 1; i <= imax; i++){
-		for(j = 1; j <= (jmax-1); j++){
-			V[i][j] = G[i][j]-(dt/dy)*(P[i][j+1]-P[i][j]);
+		for(j = 1; j <= jmax; j++){
+			if(Flag[i][j]>15){
+				/*Calculate the new velocity U according to the formula above*/
+				if(i<imax){
+					U[i][j] = F[i][j]-(dt/dx)*(P[i+1][j]-P[i][j]);
+				}
+				/*Calculate the new velocity V according to the formula above*/
+				if(j<jmax){
+					V[i][j] = G[i][j]-(dt/dy)*(P[i][j+1]-P[i][j]);
+				}
+			}
 		}
 	}
+
 }
