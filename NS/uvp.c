@@ -90,31 +90,31 @@ void calculate_fg(
 
 				G[i][j] = V[i][j]  + dt * ( 1/Re * ( (d2vdx2 ) + (d2vdy2) ) - (duvdx)  - dv2dy + GY ) ;
 			}
-			if(Flag[i][j]==B_N && i<imax && j<jmax){
+			if(Flag[i][j]==B_N){
 				G[i][j]=V[i][j];
 			}
-			else if(Flag[i][j]==B_S && i<imax && j<jmax){
+			else if(Flag[i][j]==B_S){
 				G[i][j-1]=V[i][j-1];
 			}
-			else if(Flag[i][j]==B_W && i<imax && j<jmax){
+			else if(Flag[i][j]==B_W){
 				F[i-1][j]=U[i-1][j];
 			}
-			else if(Flag[i][j]==B_O && i<imax && j<jmax){
+			else if(Flag[i][j]==B_O){
 				F[i][j]=U[i][j];
 			}
-			else if(Flag[i][j]==B_NO && i<imax && j<jmax){
+			else if(Flag[i][j]==B_NO){
 				F[i][j]=U[i][j];
 				G[i][j]=V[i][j];
 			}
-			else if(Flag[i][j]==B_NW && i<imax && j<jmax){
+			else if(Flag[i][j]==B_NW){
 				F[i-1][j]=U[i-1][j];
 				G[i][j]=V[i][j];
 			}
-			else if(Flag[i][j]==B_SO && i<imax && j<jmax){
+			else if(Flag[i][j]==B_SO){
 				F[i][j]=U[i][j];
 				G[i][j-1]=V[i][j-1];
 			}
-			else if(Flag[i][j]==B_SW && i<imax && j<jmax){
+			else if(Flag[i][j]==B_SW){
 				F[i-1][j]=U[i-1][j];
 				G[i][j-1]=V[i][j-1];
 			}
