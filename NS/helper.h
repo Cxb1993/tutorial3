@@ -194,6 +194,17 @@ void write_matrix(
   int fFirst 
 );
 
+void write_imatrix( const char* szFileName,       /* filename */
+                  int **m,		       /* matrix */
+                  int nrl,		       /* first column */
+                  int nrh,		       /* last column */
+                  int ncl,		       /* first row */
+                  int nch,		       /* last row */
+                  double xlength,	       /* size of the geometry in */
+                  /* x-direction */
+                  double ylength,	       /* size of the geometry in */
+                  /* y-direction  */
+                  int fFirst ); 	       /* 0 == append, else overwrite*/
 /**
  * @param szFileName    filehandle
  * @param m             matrix
