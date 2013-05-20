@@ -208,11 +208,11 @@ void spec_boundary_val(
 	}
 	if(strcmp(problem,"FlowOverStep")==0){
 		for (j = 1; j < (jmax)/2; j++){
-			U[0][j] = 1.0;
+			U[0][j] = 0.0;
 			V[0][j]= 0.0;
 		}
 		for (j = (jmax)/2; j < jmax + 1; j++){
-			U[0][j] = 0.0;
+			U[0][j] = 1.0;
 			V[0][j]= 0.0;
 		}
 	}

@@ -88,6 +88,7 @@ int main(int argc, char** argv){
 	char problem[80];
 	int n_div;
 
+
 	/* read the program configuration file using read_parameters()*/
 	read_parameters(&Re, &UI, &VI, &PI, &GX, &GY, &t_end, &xlength, &ylength, &dt, &dx, &dy, &imax,
 			&jmax, &alpha, &omg, &tau, &itermax, &eps, &dt_value, &wl, &wr, &wt, &wb, problem, &dp,
@@ -107,9 +108,13 @@ int main(int argc, char** argv){
 	n = 0;
 
 	/* create the initial setup init_uvp()*/
-	init_uvp(UI, VI, PI, imax, jmax, U, V, P);
 	init_flag(problem, imax, jmax, Flag);
+	init_uvp(UI, VI, PI, imax, jmax, U, V, P, Flag);
 
+	/*write_imatrix("Matrix.dat", Flag, 0, imax+1, 0, jmax+1, imax+1, jmax+1, 1);
+	write_matrix("Matrix.dat", U, 0, imax+1, 0, jmax+1,imax+1, jmax+1, 0);
+	write_matrix("Matrix.dat", V, 0, imax+1, 0, jmax+1, imax+1, jmax+1, 0);
+	write_matrix("Matrix.dat", P, 0, imax+1, 0, jmax+1, imax+1, jmax+1, 0);*/
 	/* ----------------------------------------------------------------------- */
 	/*                             Performing the main loop                    */
 	/* ----------------------------------------------------------------------- */
