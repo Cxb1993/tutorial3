@@ -132,7 +132,7 @@ int main(int argc, char** argv){
 		while(it < itermax && res > eps){
 			/*	Perform a SOR iteration according to (18) using the*/
 			/*	provided function and retrieve the residual res*/
-			sor(omg, dx, dy, imax, jmax, P, RS, &res);
+			sor(omg, dx, dy, imax, jmax, P, RS, &res, Flag);
 			/*	it := it + 1*/
 			it++;
 		}
