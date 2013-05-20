@@ -246,7 +246,7 @@ void init_flag(
 			if(temp[i][j-1]>=B_C){
 				Flag[i][j] |= B_S;
 			}
-			if(temp[i][j]==3||temp[i][j]==7||(temp[i][j]>10&&temp[i][j]<16)){
+			if(Flag[i][j]==3||Flag[i][j]==7||(Flag[i][j]>10&&Flag[i][j]<16)){
 				printf("\nERROR! The flag field contains a forbidden boundary cell at i= %i j= %i\n",i,j);
 			}
 		}
