@@ -72,6 +72,7 @@ int read_parameters(double *Re,                /* reynolds number   */
 		int *wt,						/* boundary type for top wall (1:no-slip 2: free-slip 3: outflow) */
 		int *wb,						/* boundary type for bottom wall (1:no-slip 2: free-slip 3: outflow) */
 		char *problem,               /* name of problem */
+		double *dp,
 		int argc,
 		char *argv
 )           
@@ -111,6 +112,8 @@ int read_parameters(double *Re,                /* reynolds number   */
 		READ_INT( szFileName, *wb );
 
 		strcpy(problem, argv);
+
+		READ_DOUBLE ( szFileName, *dp );
 
 		*dx = *xlength / (double)(*imax);
 		*dy = *ylength / (double)(*jmax);

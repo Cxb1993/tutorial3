@@ -64,6 +64,7 @@ int read_parameters(
 		int *wt,
 		int *wb,
 		char *problem,
+		double *dp,
 		int argc,
 		char *argv
 );

@@ -84,12 +84,13 @@ int main(int argc, char** argv){
 	int wr;				/* boundary type for right wall (1:no-slip 2: free-slip 3: outflow) */
 	int wt;				/* boundary type for top wall (1:no-slip 2: free-slip 3: outflow) */
 	int wb;				/* boundary type for bottom wall (1:no-slip 2: free-slip 3: outflow) */
+	double dp;          /* change in pressure */
 	char problem[80];
 	int n_div;
 
 	/* read the program configuration file using read_parameters()*/
 	read_parameters(&Re, &UI, &VI, &PI, &GX, &GY, &t_end, &xlength, &ylength, &dt, &dx, &dy, &imax,
-			&jmax, &alpha, &omg, &tau, &itermax, &eps, &dt_value, &wl, &wr, &wt, &wb, problem,
+			&jmax, &alpha, &omg, &tau, &itermax, &eps, &dt_value, &wl, &wr, &wt, &wb, problem, &dp,
 			argc, argv[1]);
 
 	/* set up the matrices (arrays) needed using the matrix() command*/
@@ -120,7 +121,7 @@ int main(int argc, char** argv){
 		/*	Set boundary values for u and v according to (14),(15)*/
 		boundaryvalues(imax, jmax, U, V, wl, wr, wt, wb, Flag);
 		/*  Set special boundary values according to the problem*/
-		spec_boundary_val(problem, imax, jmax, U, V);
+		spec_boundary_val(problem, imax, jmax, U, V, dp, Re, dx);
 		/*	Compute F(n) and G(n) according to (9),(10),(17)*/
 		calculate_fg(Re, GX, GY, alpha, dt, dx, dy, imax, jmax, U, V ,F , G, Flag);
 		/*	Compute the right-hand side rs of the pressure equation (11)*/
@@ -140,7 +141,7 @@ int main(int argc, char** argv){
 		calculate_uv(dt, dx, dy, imax, jmax, U, V, F, G, P, Flag);
 		/*	Output of u; v; p values for visualization, if necessary*/
 
-		n_div=(dt_value/dt);
+		n_div=(int)(dt_value/dt);
 		if(n % n_div == 0){
 			write_vtkFile(problem, n , xlength, ylength, imax, jmax, dx, dy, U, V, P);
 		}
@@ -155,6 +156,7 @@ int main(int argc, char** argv){
 	free_matrix(U, 0, imax+1, 0, jmax+1);
 	free_matrix(V, 0, imax+1, 0, jmax+1);
 	free_matrix(P, 0, imax+1, 0, jmax+1);
+
 	free_matrix(RS, 0, imax+1, 0, jmax+1);
 	free_matrix(F, 0, imax+1, 0, jmax+1);
 	free_matrix(G, 0, imax+1, 0, jmax+1);

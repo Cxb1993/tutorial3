@@ -182,20 +182,38 @@ void spec_boundary_val(
 		int imax,
 		int jmax,
 		double **U,
-		double **V
+		double **V,
+		double dp,
+		double Re,
+		double dx
 ){
-	int i;
+	int i,j;
 	if(strcmp(problem,"cavity")==0){
 		for (i = 1; i < imax + 1; i++){
 			V[i][jmax] = 0;
 			U[i][jmax+1]= 2.0-1*U[i][jmax];
 		}
 	}
-	/* TODO!
-	 * if(strcmp(problem,"PlaneShearFlow")==0){
+	if(strcmp(problem,"KarmanVortexStreet")==0){
 		for (j = 1; j < jmax + 1; j++){
-			U[0][j] = U[1][j];
+			U[0][j] = 1.0;
+			V[0][j]= 0.0;
+		}
+	}
+	if(strcmp(problem,"PlaneShearFlow")==0){
+		for (j = 1; j < jmax + 1; j++){
+			U[0][j] = -1/2*Re*(dp/dx)*j*(j-jmax);
 			V[0][j]= V[1][j];
 		}
-	}*/
+	}
+	if(strcmp(problem,"FlowOverStep")==0){
+		for (j = 1; j < (jmax)/2; j++){
+			U[0][j] = 1.0;
+			V[0][j]= 0.0;
+		}
+		for (j = (jmax)/2; j < jmax + 1; j++){
+			U[0][j] = 0.0;
+			V[0][j]= 0.0;
+		}
+	}
 }
