@@ -81,7 +81,8 @@ void init_uvp(
 		int jmax,
 		double **U,
 		double **V,
-		double **P
+		double **P,
+		int **Flag
 );
 
 /*The array Flag is initialized with the flags C_F for fluid cells and C_B for obstacle cells as
@@ -92,6 +93,7 @@ void init_flag(
 		const char *problem,
 		int imax,
 		int jmax,
-		int **Flag);
+		int **Flag
+		);
 #endif
 

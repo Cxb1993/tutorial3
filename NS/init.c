@@ -144,22 +144,28 @@ void init_uvp(
 		int jmax,
 		double **U,
 		double **V,
-		double **P
+		double **P,
+		int **Flag
 )
 
 {
 	int i;
 	int j;
 
-	for ( i = 1 ; i<= imax;  i++ )
+	for ( i = 0 ; i<= imax+1;  i++ )
 	{
-		for (j = 1; j<= jmax; j++ )
+		for (j = 0; j<= jmax+1; j++ )
 		{
-
-			U[i][j] = UI ;
-			V[i][j] = VI ;
-			P[i][j] = PI ;
-
+			if(Flag[i][j]>15){
+				U[i][j] = UI ;
+				V[i][j] = VI ;
+				P[i][j] = PI ;
+			}
+			else{
+				U[i][j] = 0.0 ;
+				V[i][j] = 0.0 ;
+				P[i][j] = 0.0 ;
+			}
 		}
 	}
 
@@ -177,43 +183,44 @@ void init_flag(
 		const char *problem,
 		int imax,
 		int jmax,
-		int **Flag){
+		int **Flag
+		){
 
 	char image[84];
 	int i, j;
+	int **temp;
 	strcpy(image, problem);
 	strcat(image, ".pgm");
-	Flag = read_pgm(image);
+
+	temp = imatrix(0, imax, 0, jmax);
+	temp = read_pgm(image);
 
 	/* Outer boundaries will always be the same, so we assign those flags first*/
 	/* Corners: */
-	Flag[0][0]= 0;
-	Flag[imax+1][0]= 0;
-	Flag[0][jmax+1]= 0;
-	Flag[imax+1][jmax+1]= 0;
+	init_imatrix(Flag, 0, imax, 0, jmax, 0);
 	/* Left boundary: */
 	for(j = 1; j < jmax + 1; j++){
-		if(Flag[1][j]>=B_C){
+		if(temp[1][j]>=B_C){
 			Flag[0][j] |= B_O;
 		}
 	}
 
 	/* Right boundary: */
 	for(j = 1; j < jmax + 1; j++){
-		if(Flag[imax][j]>=B_C){
+		if(temp[imax][j]>=B_C){
 			Flag[imax+1][j] |= B_W;
 		}
 	}
 
 	/* Top boundary: */
 	for(i = 1; i < imax + 1; i++){
-		if(Flag[i][jmax]>=B_C){
+		if(temp[i][jmax]>=B_C){
 			Flag[i][jmax+1] |= B_S;
 		}	}
 
 	/* Bottom boundary: */
 	for(i = 1; i < imax + 1; i++){
-		if(Flag[i][1]>=B_C){
+		if(temp[i][1]>=B_C){
 			Flag[i][0] |= B_N;
 		}
 	}
@@ -221,29 +228,30 @@ void init_flag(
 	/* Now loop over all inner cells checking the four neighbors (no corners)*/
 	for(i = 1; i < imax + 1; i++){
 		for(j = 1; j < jmax + 1; j++){
-			if(Flag[i][j]==C_F){
+			if(temp[i][j]==C_F){
 				Flag[i][j] = B_C;
 			}
 			else{
 				Flag[i][j] = 0;
 			}
-			if(Flag[i-1][j]>=B_C){
+			if(temp[i-1][j]>=B_C){
 				Flag[i][j] |= B_W;
 			}
-			if(Flag[i+1][j]>=B_C){
+			if(temp[i+1][j]>=B_C){
 				Flag[i][j] |= B_O;
 			}
-			if(Flag[i][j+1]>=B_C){
+			if(temp[i][j+1]>=B_C){
 				Flag[i][j] |= B_N;
 			}
-			if(Flag[i][j-1]>=B_C){
+			if(temp[i][j-1]>=B_C){
 				Flag[i][j] |= B_S;
 			}
-			if(Flag[i][j]==3||Flag[i][j]==7||(Flag[i][j]>10&&Flag[i][j]<16)){
+			if(temp[i][j]==3||temp[i][j]==7||(temp[i][j]>10&&temp[i][j]<16)){
 				printf("\nERROR! The flag field contains a forbidden boundary cell at i= %i j= %i\n",i,j);
 			}
 		}
 	}
+	free_imatrix(temp, 0, imax, 0, jmax);
 }
 
 
