@@ -188,30 +188,29 @@ void init_flag(
 	Flag[imax+1][0]= 0;
 	Flag[0][jmax+1]= 0;
 	Flag[imax+1][jmax+1]= 0;
-
 	/* Left boundary: */
 	for(j = 1; j < jmax + 1; j++){
-		if(Flag[i+1][j]>=B_C){
+		if(Flag[1][j]>=B_C){
 			Flag[0][j] |= B_O;
 		}
 	}
 
 	/* Right boundary: */
 	for(j = 1; j < jmax + 1; j++){
-		if(Flag[i-1][j]>=B_C){
+		if(Flag[imax][j]>=B_C){
 			Flag[imax+1][j] |= B_W;
 		}
 	}
 
 	/* Top boundary: */
 	for(i = 1; i < imax + 1; i++){
-		if(Flag[i][j-1]>=B_C){
+		if(Flag[i][jmax]>=B_C){
 			Flag[i][jmax+1] |= B_S;
 		}	}
 
 	/* Bottom boundary: */
 	for(i = 1; i < imax + 1; i++){
-		if(Flag[i][j+1]>=B_C){
+		if(Flag[i][1]>=B_C){
 			Flag[i][0] |= B_N;
 		}
 	}
