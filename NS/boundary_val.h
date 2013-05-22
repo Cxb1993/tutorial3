@@ -27,7 +27,7 @@ void spec_boundary_val(
 		double **V,
 		double dp,
 		double Re,
-		double dx,
+		double xlength,
 		double ylength
 );
 

@@ -185,7 +185,7 @@ void spec_boundary_val(
 		double **V,
 		double dp,
 		double Re,
-		double dx,
+		double xlength,
 		double ylength
 ){
 	int i,j;
@@ -203,8 +203,8 @@ void spec_boundary_val(
 	}
 	if(strcmp(problem,"PlaneShearFlow")==0){
 		for (j = 1; j < jmax + 1; j++){
-			U[0][j] = -1/2*Re*(dp/dx)*(ylength/jmax)*j*((ylength/jmax*j)-ylength);
-			V[0][j]= V[1][j];
+			U[0][j] = -1/2.0*Re*(dp/xlength)*(ylength/(double)jmax)*((double)jmax-(double)j+1)*((ylength/(double)jmax*((double)jmax-(double)j+1))-ylength);
+			V[0][j]= 0;
 		}
 	}
 	if(strcmp(problem,"FlowOverStep")==0){
