@@ -126,7 +126,7 @@ int main(int argc, char** argv){
 		/*	Set boundary values for u and v according to (14),(15)*/
 		boundaryvalues(imax, jmax, U, V, wl, wr, wt, wb, Flag);
 		/*  Set special boundary values according to the problem*/
-		spec_boundary_val(problem, imax, jmax, U, V, dp, Re, dx);
+		spec_boundary_val(problem, imax, jmax, U, V, dp, Re, dx, ylength);
 		/*	Compute F(n) and G(n) according to (9),(10),(17)*/
 		calculate_fg(Re, GX, GY, alpha, dt, dx, dy, imax, jmax, U, V ,F , G, Flag);
 		/*	Compute the right-hand side rs of the pressure equation (11)*/
