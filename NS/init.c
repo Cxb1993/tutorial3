@@ -72,7 +72,9 @@ int read_parameters(double *Re,                /* reynolds number   */
 		int *wt,						/* boundary type for top wall (1:no-slip 2: free-slip 3: outflow) */
 		int *wb,						/* boundary type for bottom wall (1:no-slip 2: free-slip 3: outflow) */
 		char *problem,               /* name of problem */
-		double *dp,
+		double *lp,					/* pressure at left boundary */
+		double *rp,					/* pressure at right boundary */
+		double *dp,					/* pressure difference */
 		int argc,
 		char *argv
 )           
@@ -113,6 +115,8 @@ int read_parameters(double *Re,                /* reynolds number   */
 
 		strcpy(problem, argv);
 
+		READ_DOUBLE ( szFileName, *lp );
+		READ_DOUBLE ( szFileName, *rp );
 		READ_DOUBLE ( szFileName, *dp );
 
 		*dx = *xlength / (double)(*imax);
@@ -156,7 +160,7 @@ void init_uvp(
 	{
 		for (j = 0; j<= jmax+1; j++ )
 		{
-			if(Flag[i][j]>15){
+			if((Flag[i][j]&B_C)==B_C){
 				U[i][j] = UI ;
 				V[i][j] = VI ;
 				P[i][j] = PI ;
@@ -183,6 +187,9 @@ void init_flag(
 		const char *problem,
 		int imax,
 		int jmax,
+		double lp,
+		double rp,
+		double dp,
 		int **Flag
 		){
 
@@ -200,28 +207,34 @@ void init_flag(
 	init_imatrix(Flag, 0, imax, 0, jmax, 0);
 	/* Left boundary: */
 	for(j = 1; j < jmax + 1; j++){
-		if(temp[1][j]>=B_C){
-			Flag[0][j] |= B_O;
+		if((temp[1][j] & B_C)){
+			Flag[0][j] = B_O;
+		}
+		if(lp>=0||dp!=0){
+			Flag[0][j]|= P_L;
 		}
 	}
 
 	/* Right boundary: */
 	for(j = 1; j < jmax + 1; j++){
-		if(temp[imax][j]>=B_C){
-			Flag[imax+1][j] |= B_W;
+		if((temp[1][j] & B_C)){
+			Flag[imax+1][j] = B_W;
+		}
+		if(rp>=0){
+			Flag[imax+1][j]|= P_R;
 		}
 	}
 
 	/* Top boundary: */
 	for(i = 1; i < imax + 1; i++){
-		if(temp[i][jmax]>=B_C){
-			Flag[i][jmax+1] |= B_S;
+		if((temp[1][j] & B_C)){
+			Flag[i][jmax+1] = B_S;
 		}	}
 
 	/* Bottom boundary: */
 	for(i = 1; i < imax + 1; i++){
-		if(temp[i][1]>=B_C){
-			Flag[i][0] |= B_N;
+		if((temp[1][j] & B_C)){
+			Flag[i][0] = B_N;
 		}
 	}
 
@@ -234,19 +247,19 @@ void init_flag(
 			else{
 				Flag[i][j] = 0;
 			}
-			if(temp[i-1][j]>=B_C){
+			if((temp[i-1][j]&B_C)==B_C||(temp[i-1][j]&C_F)==C_F){
 				Flag[i][j] |= B_W;
 			}
-			if(temp[i+1][j]>=B_C){
+			if((temp[i+1][j]&B_C)==B_C||(temp[i+1][j]&C_F)==C_F){
 				Flag[i][j] |= B_O;
 			}
-			if(temp[i][j+1]>=B_C){
+			if((temp[i][j+1]&B_C)==B_C||(temp[i][j+1]&C_F)==C_F){
 				Flag[i][j] |= B_N;
 			}
-			if(temp[i][j-1]>=B_C){
+			if((temp[i][j-1]&B_C)==B_C||(temp[i][j-1]&C_F)==C_F){
 				Flag[i][j] |= B_S;
 			}
-			if(Flag[i][j]==3||Flag[i][j]==7||(Flag[i][j]>10&&Flag[i][j]<16)){
+			if((Flag[i][j]&31)==3||(Flag[i][j]&31)==7||((Flag[i][j]&31)>10&&(Flag[i][j]&31)<16)){
 				printf("\nERROR! The flag field contains a forbidden boundary cell at i= %i j= %i\n",i,j);
 			}
 		}

@@ -21,6 +21,16 @@ void boundaryvalues(
 ) {
 
 	int i,j;
+	/*Initialize corners*/
+	U[0][0]=0.0;
+	U[0][jmax+1]=0.0;
+	U[imax+1][0]=0.0;
+	U[imax+1][jmax+1]=0.0;
+	V[0][0]=0.0;
+	V[0][jmax+1]=0.0;
+	V[imax+1][0]=0.0;
+	V[imax+1][jmax+1]=0.0;
+
 	/*Set values for the left boundary*/
 	switch(wl){
 	case NO_SLIP:
@@ -102,19 +112,19 @@ void boundaryvalues(
 	/*Set values for the bottom boundary*/
 	switch(wb){
 	case NO_SLIP:
-		for (i = 1; i <= imax; i++){
+		for (i = 1; i < imax + 1; i++){
 			V[i][0] = 0;
 			U[i][0]=-1*U[i][1];
 		}
 		break;
 	case FREE_SLIP:
-		for (i = 1; i <= imax; i++){
+		for (i = 1; i < imax + 1; i++){
 			V[i][0] = 0;
 			U[i][0] = U[i][1];
 		}
 		break;
 	case OUTFLOW:
-		for (i = 1; i <= imax; i++){
+		for (i = 1; i < imax + 1; i++){
 			V[i][0] = V[i][1];
 			U[i][0]= U[i][1];
 		}
@@ -128,45 +138,45 @@ void boundaryvalues(
 	 */
 	for(i = 1; i < imax+1; i++){
 		for(j = 1; j < jmax+1; j++){
-			if(Flag[i][j]==B_N){
+			if((Flag[i][j]&31)==B_N){
 				V[i][j]=0;
 				U[i-1][j]=-1*U[i-1][j+1];
 				U[i][j]=-1*U[i][j+1];
 			}
-			else if(Flag[i][j]==B_S){
+			else if((Flag[i][j]&31)==B_S){
 				V[i][j-1]=0;
 				U[i-1][j]=-1*U[i-1][j-1];
 				U[i][j]=-1*U[i][j-1];
 			}
-			else if(Flag[i][j]==B_W){
+			else if((Flag[i][j]&31)==B_W){
 				U[i-1][j]=0;
 				V[i][j-1]=-1*V[i-1][j-1];
 				V[i][j]=-1*V[i-1][j];
 			}
-			else if(Flag[i][j]==B_O){
+			else if((Flag[i][j]&31)==B_O){
 				U[i][j]=0;
 				V[i][j-1]=-1*V[i+1][j-1];
 				V[i][j]=-1*V[i+1][j];
 			}
-			else if(Flag[i][j]==B_NO){
+			else if((Flag[i][j]&31)==B_NO){
 				U[i][j]=0;
 				U[i-1][j]=-1*U[i-1][j+1];
 				V[i][j]=0;
 				V[i][j-1]=-1*V[i+1][j-1];
 			}
-			else if(Flag[i][j]==B_NW){
+			else if((Flag[i][j]&31)==B_NW){
 				U[i-1][j]=0;
 				U[i][j]=-1*U[i][j+1];
 				V[i][j]=0;
 				V[i][j-1]=-1*V[i-1][j-1];
 			}
-			else if(Flag[i][j]==B_SO){
+			else if((Flag[i][j]&31)==B_SO){
 				U[i][j]=0;
 				U[i-1][j]=-1*U[i-1][j-1];
 				V[i][j-1]=0;
 				V[i][j]=-1*V[i+1][j];
 			}
-			else if(Flag[i][j]==B_SW){
+			else if((Flag[i][j]&31)==B_SW){
 				U[i-1][j]=0;
 				U[i][j]=-1*U[i][j-1];
 				V[i][j]=-1*V[i-1][j];
@@ -182,11 +192,7 @@ void spec_boundary_val(
 		int imax,
 		int jmax,
 		double **U,
-		double **V,
-		double dp,
-		double Re,
-		double xlength,
-		double ylength
+		double **V
 ){
 	int i,j;
 	if(strcmp(problem,"cavity")==0){
@@ -201,18 +207,18 @@ void spec_boundary_val(
 			V[0][j]= 0.0;
 		}
 	}
-	if(strcmp(problem,"PlaneShearFlow")==0){
+	/*if(strcmp(problem,"PlaneShearFlow")==0){
 		for (j = 1; j < jmax + 1; j++){
-			U[0][j] = -1/2.0*Re*(dp/xlength)*(ylength/(double)jmax)*((double)jmax-(double)j+1)*((ylength/(double)jmax*((double)jmax-(double)j+1))-ylength);
-			V[0][j]= 0;
-		}
-	}
-	if(strcmp(problem,"FlowOverStep")==0){
-		for (j = 1; j < (jmax)/2; j++){
 			U[0][j] = 0.0;
 			V[0][j]= 0.0;
 		}
-		for (j = (jmax)/2; j < jmax + 1; j++){
+	}*/
+	if(strcmp(problem,"FlowOverStep")==0){
+		for (j = 1; j <= (jmax)/2; j++){
+			U[0][j] = 0.0;
+			V[0][j]= 0.0;
+		}
+		for (j = ((jmax)/2) + 1; j < jmax + 1; j++){
 			U[0][j] = 1.0;
 			V[0][j]= 0.0;
 		}

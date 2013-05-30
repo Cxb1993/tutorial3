@@ -84,6 +84,8 @@ int main(int argc, char** argv){
 	int wr;				/* boundary type for right wall (1:no-slip 2: free-slip 3: outflow) */
 	int wt;				/* boundary type for top wall (1:no-slip 2: free-slip 3: outflow) */
 	int wb;				/* boundary type for bottom wall (1:no-slip 2: free-slip 3: outflow) */
+	double lp;			/* pressure in left boundary */
+	double rp;			/* pressure in right boundary */
 	double dp;          /* change in pressure */
 	char problem[80];
 	int n_div;
@@ -91,7 +93,7 @@ int main(int argc, char** argv){
 
 	/* read the program configuration file using read_parameters()*/
 	read_parameters(&Re, &UI, &VI, &PI, &GX, &GY, &t_end, &xlength, &ylength, &dt, &dx, &dy, &imax,
-			&jmax, &alpha, &omg, &tau, &itermax, &eps, &dt_value, &wl, &wr, &wt, &wb, problem, &dp,
+			&jmax, &alpha, &omg, &tau, &itermax, &eps, &dt_value, &wl, &wr, &wt, &wb, problem, &lp, &rp, &dp,
 			argc, argv[1]);
 
 	/* set up the matrices (arrays) needed using the matrix() command*/
@@ -108,7 +110,7 @@ int main(int argc, char** argv){
 	n = 0;
 
 	/* create the initial setup init_uvp()*/
-	init_flag(problem, imax, jmax, Flag);
+	init_flag(problem, imax, jmax, lp, rp, dp, Flag);
 	init_uvp(UI, VI, PI, imax, jmax, U, V, P, Flag);
 
 	/*write_imatrix("Matrix.dat", Flag, 0, imax+1, 0, jmax+1, imax+1, jmax+1, 1);
@@ -126,7 +128,7 @@ int main(int argc, char** argv){
 		/*	Set boundary values for u and v according to (14),(15)*/
 		boundaryvalues(imax, jmax, U, V, wl, wr, wt, wb, Flag);
 		/*  Set special boundary values according to the problem*/
-		spec_boundary_val(problem, imax, jmax, U, V, dp, Re, xlength, ylength);
+		spec_boundary_val(problem, imax, jmax, U, V);
 		/*	Compute F(n) and G(n) according to (9),(10),(17)*/
 		calculate_fg(Re, GX, GY, alpha, dt, dx, dy, imax, jmax, U, V ,F , G, Flag);
 		/*	Compute the right-hand side rs of the pressure equation (11)*/
@@ -138,7 +140,7 @@ int main(int argc, char** argv){
 		while(it < itermax && res > eps){
 			/*	Perform a SOR iteration according to (18) using the*/
 			/*	provided function and retrieve the residual res*/
-			sor(omg, dx, dy, imax, jmax, P, RS, &res, Flag);
+			sor(omg, dx, dy, imax, jmax, P, RS, &res, lp, rp, dp, Flag);
 			/*	it := it + 1*/
 			it++;
 		}
@@ -148,7 +150,7 @@ int main(int argc, char** argv){
 
 		n_div=(int)(dt_value/dt);
 		if(n % n_div == 0){
-			write_vtkFile(problem, n , xlength, ylength, imax, jmax, dx, dy, U, V, P);
+			write_vtkFile(problem, n , xlength, ylength, imax, jmax, dx, dy, U, V, Flag);
 		}
 		/*	t := t + dt*/
 		t = t + dt;

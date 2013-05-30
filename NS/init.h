@@ -64,6 +64,8 @@ int read_parameters(
 		int *wt,
 		int *wb,
 		char *problem,
+		double *lp,
+		double *rp,
 		double *dp,
 		int argc,
 		char *argv
@@ -93,6 +95,9 @@ void init_flag(
 		const char *problem,
 		int imax,
 		int jmax,
+		double lp,
+		double rp,
+		double dp,
 		int **Flag
 		);
 #endif

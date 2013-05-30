@@ -24,11 +24,6 @@ void spec_boundary_val(
 		int imax,
 		int jmax,
 		double **U,
-		double **V,
-		double dp,
-		double Re,
-		double xlength,
-		double ylength
-);
+		double **V);
 
 #endif

@@ -63,7 +63,7 @@ void calculate_fg(
 	{
 		for( j = 1 ; j <= jmax ; j++ )
 		{
-			if((Flag[i][j]>15||Flag[i][j]==B_N||Flag[i][j]== B_S )&& i<imax ){
+			if(((Flag[i][j]&B_C)==B_C||(Flag[i][j]&15)==B_N||(Flag[i][j]&15)== B_S )&& i<imax ){
 				d2udx2 = ( U[i+1][j]  - 2*U[i][j] + U[i-1][j] ) / ( dx * dx) ;
 
 				d2udy2 = ( U[i][j+1]  - 2*U[i][j] + U[i][j-1]) / (dy * dy )  ;
@@ -77,7 +77,7 @@ void calculate_fg(
 				F[i][j] = U[i][j]  + dt * ( 1/Re * ( (d2udx2 ) + (d2udy2) ) - (du2dx)  - duvdy + GX ) ;
 			}
 			/*Determines the value of G according to the formula above with the help of temporary variables*/
-			if((Flag[i][j]>15||Flag[i][j]==B_W||Flag[i][j]==B_O) && j<jmax ){
+			if(((Flag[i][j]&B_C)==B_C||(Flag[i][j]&15)==B_W||(Flag[i][j]&15)== B_O ) && j<jmax ){
 				d2vdx2 = ( V[i+1][j]  - 2*V[i][j] + V[i-1][j] ) / ( dx * dx) ;
 
 				d2vdy2 = ( V[i][j+1]  - 2*V[i][j] + V[i][j-1]) / (dy * dy )  ;
@@ -90,31 +90,31 @@ void calculate_fg(
 
 				G[i][j] = V[i][j]  + dt * ( 1/Re * ( (d2vdx2 ) + (d2vdy2) ) - (duvdx)  - dv2dy + GY ) ;
 			}
-			if(Flag[i][j]==B_N){
+			if((Flag[i][j]&15)==B_N){
 				G[i][j]=V[i][j];
 			}
-			else if(Flag[i][j]==B_S){
+			else if((Flag[i][j]&15)==B_S){
 				G[i][j-1]=V[i][j-1];
 			}
-			else if(Flag[i][j]==B_W){
+			else if((Flag[i][j]&15)==B_W){
 				F[i-1][j]=U[i-1][j];
 			}
-			else if(Flag[i][j]==B_O){
+			else if((Flag[i][j]&15)==B_O){
 				F[i][j]=U[i][j];
 			}
-			else if(Flag[i][j]==B_NO){
+			else if((Flag[i][j]&15)==B_NO){
 				F[i][j]=U[i][j];
 				G[i][j]=V[i][j];
 			}
-			else if(Flag[i][j]==B_NW){
+			else if((Flag[i][j]&15)==B_NW){
 				F[i-1][j]=U[i-1][j];
 				G[i][j]=V[i][j];
 			}
-			else if(Flag[i][j]==B_SO){
+			else if((Flag[i][j]&15)==B_SO){
 				F[i][j]=U[i][j];
 				G[i][j-1]=V[i][j-1];
 			}
-			else if(Flag[i][j]==B_SW){
+			else if((Flag[i][j]&15)==B_SW){
 				F[i-1][j]=U[i-1][j];
 				G[i][j-1]=V[i][j-1];
 			}
@@ -258,7 +258,7 @@ void calculate_uv(
 	int j;
 	for(i = 1; i <= imax; i++){
 		for(j = 1; j <= jmax; j++){
-			if(Flag[i][j]>15){
+			if((Flag[i][j]&B_C)==B_C){
 				/*Calculate the new velocity U according to the formula above*/
 				if(i<imax){
 					U[i][j] = F[i][j]-(dt/dx)*(P[i+1][j]-P[i][j]);

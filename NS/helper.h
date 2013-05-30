@@ -37,16 +37,21 @@
 /**
  * Boundary cell classification |center|east|west|south|north| (1 = fluid)
  */
-#define B_N 1 	/* 0b00001*/
-#define B_S 2	/* 0b00010*/
-#define B_W 4	/* 0b00100*/
-#define B_O 8	/* 0b01000*/
-#define B_C 16	/* 0b01000*/
-#define B_NW 5	/* 0b00101*/
-#define B_NO 9	/* 0b01001*/
-#define B_SW 6	/* 0b00110*/
-#define B_SO 10	/* 0b01010*/
+#define B_N 1 	/* 0b0000001*/
+#define B_S 2	/* 0b0000010*/
+#define B_W 4	/* 0b0000100*/
+#define B_O 8	/* 0b0001000*/
+#define B_C 16	/* 0b0010000*/
+#define B_NW 5	/* 0b0000101*/
+#define B_NO 9	/* 0b0001001*/
+#define B_SW 6	/* 0b0000110*/
+#define B_SO 10	/* 0b0001010*/
 
+/**
+ * Boundary cells
+ */
+#define P_L 32  /* 0b0100000*/
+#define P_R 64  /* 0b1000000*/
 /**
  * Stores the last timer value 
  */
