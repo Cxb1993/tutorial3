@@ -19,58 +19,9 @@ void sor(
 	int i,j;
 	double rloc;
 	double coeff = omg/(2.0*(1.0/(dx*dx)+1.0/(dy*dy)));
-	int count = 0;
+	int count;
 
-
-	/* SOR iteration */
-	for(i = 1; i <= imax; i++) {
-		for(j = 1; j<=jmax; j++) {
-			if((Flag[i][j]&B_C)==B_C){
-				P[i][j] = (1.0-omg)*P[i][j] + coeff*(( P[i+1][j]+P[i-1][j])/(dx*dx) +
-						( P[i][j+1]+P[i][j-1])/(dy*dy) - RS[i][j]);
-				count++;
-			}
-			else if((Flag[i][j]&15)==B_N){
-				P[i][j]=P[i][j+1];
-			}
-			else if((Flag[i][j]&15)==B_S){
-				P[i][j]=P[i][j-1];
-			}
-			else if((Flag[i][j]&15)==B_W){
-				P[i][j]=P[i-1][j];
-			}
-			else if((Flag[i][j]&15)==B_O){
-				P[i][j]=P[i+1][j];
-			}
-			else if((Flag[i][j]&15)==B_NO){
-				P[i][j]=(P[i+1][j]+P[i][j+1])/2.0;
-			}
-			else if((Flag[i][j]&15)==B_NW){
-				P[i][j]=(P[i][j+1]+P[i-1][j])/2.0;
-			}
-			else if((Flag[i][j]&15)==B_SO){
-				P[i][j]=(P[i][j-1]+P[i+1][j])/2.0;
-			}
-			else if((Flag[i][j]&15)==B_SW){
-				P[i][j]=(P[i][j-1]+P[i-1][j])/2.0;
-			}
-		}
-	}
-
-	/* compute the residual */
-	rloc = 0.0;
-	for(i = 1; i <= imax; i++) {
-		for(j = 1; j <= jmax; j++) {
-			if((Flag[i][j]&B_C)==B_C){
-				rloc += ( (P[i+1][j]-2.0*P[i][j]+P[i-1][j])/(dx*dx) + ( P[i][j+1]-2.0*P[i][j]+P[i][j-1])/(dy*dy) - RS[i][j])*
-						( (P[i+1][j]-2.0*P[i][j]+P[i-1][j])/(dx*dx) + ( P[i][j+1]-2.0*P[i][j]+P[i][j-1])/(dy*dy) - RS[i][j]);
-			}
-		}
-	}
-	rloc = rloc/((double)count);
-	rloc = sqrt(rloc);
-	/* set residual */
-	*res = rloc;
+	count = 0;
 
 	/* set boundary values */
 		for(i = 1; i <= imax; i++) {
@@ -107,4 +58,55 @@ void sor(
 			}
 		}
 
+	/* SOR iteration */
+	for(i = 1; i <= imax; i++) {
+		for(j = 1; j<=jmax; j++) {
+			if((Flag[i][j]&B_C)==B_C){
+				P[i][j] = (1.0-omg)*P[i][j] + coeff*(( P[i+1][j]+P[i-1][j])/(dx*dx) +
+						( P[i][j+1]+P[i][j-1])/(dy*dy) - RS[i][j]);
+				count++;
+			}
+			else if((Flag[i][j]&31)==B_N){
+				P[i][j]=P[i][j+1];
+			}
+			else if((Flag[i][j]&31)==B_S){
+				P[i][j]=P[i][j-1];
+			}
+			else if((Flag[i][j]&31)==B_W){
+				P[i][j]=P[i-1][j];
+			}
+			else if((Flag[i][j]&31)==B_O){
+				P[i][j]=P[i+1][j];
+			}
+			else if((Flag[i][j]&31)==B_NO){
+				P[i][j]=(P[i+1][j]+P[i][j+1])/2.0;
+			}
+			else if((Flag[i][j]&31)==B_NW){
+				P[i][j]=(P[i][j+1]+P[i-1][j])/2.0;
+			}
+			else if((Flag[i][j]&31)==B_SO){
+				P[i][j]=(P[i][j-1]+P[i+1][j])/2.0;
+			}
+			else if((Flag[i][j]&31)==B_SW){
+				P[i][j]=(P[i][j-1]+P[i-1][j])/2.0;
+			}
+		}
+	}
+
+
+
+	/* compute the residual */
+	rloc = 0.0;
+	for(i = 1; i <= imax; i++) {
+		for(j = 1; j <= jmax; j++) {
+			if((Flag[i][j]&B_C)==B_C){
+				rloc += ( (P[i+1][j]-2.0*P[i][j]+P[i-1][j])/(dx*dx) + ( P[i][j+1]-2.0*P[i][j]+P[i][j-1])/(dy*dy) - RS[i][j])*
+						( (P[i+1][j]-2.0*P[i][j]+P[i-1][j])/(dx*dx) + ( P[i][j+1]-2.0*P[i][j]+P[i][j-1])/(dy*dy) - RS[i][j]);
+			}
+		}
+	}
+	rloc = rloc/((double)count);
+	rloc = sqrt(rloc);
+	/* set residual */
+	*res = rloc;
 }

@@ -220,7 +220,7 @@ void init_flag(
 		if((temp[imax][j] & B_C)){
 			Flag[imax+1][j] = B_W;
 		}
-		if(rp>=0){
+		if(rp>=0||dp!=0){
 			Flag[imax+1][j]|= P_R;
 		}
 	}
