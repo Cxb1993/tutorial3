@@ -217,7 +217,7 @@ void init_flag(
 
 	/* Right boundary: */
 	for(j = 1; j < jmax + 1; j++){
-		if((temp[1][j] & B_C)){
+		if((temp[imax][j] & B_C)){
 			Flag[imax+1][j] = B_W;
 		}
 		if(rp>=0){
@@ -227,13 +227,13 @@ void init_flag(
 
 	/* Top boundary: */
 	for(i = 1; i < imax + 1; i++){
-		if((temp[1][j] & B_C)){
+		if((temp[i][jmax] & B_C)){
 			Flag[i][jmax+1] = B_S;
 		}	}
 
 	/* Bottom boundary: */
 	for(i = 1; i < imax + 1; i++){
-		if((temp[1][j] & B_C)){
+		if((temp[i][1] & B_C)){
 			Flag[i][0] = B_N;
 		}
 	}
