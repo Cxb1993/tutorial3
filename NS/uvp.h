@@ -38,7 +38,7 @@ void calculate_fg(
   double **F,
   double **G,
   int **Flag
-);
+  );
 
 
 /**
@@ -77,7 +77,8 @@ void calculate_dt(
   int imax,
   int jmax,
   double **U,
-  double **V
+  double **V,
+  int **Flag
 );
 
 

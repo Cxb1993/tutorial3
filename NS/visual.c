@@ -13,7 +13,8 @@ void write_vtkFile(const char *szProblem,
                    double dy,
                    double **U,
                    double **V,
-                   double **P) {
+                   double **P,
+                   ) {
     
     int i,j;
     char szFileName[80];

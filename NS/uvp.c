@@ -75,6 +75,7 @@ void calculate_fg(
 						alpha/dy * (abs( V[i][j] + V[i+1][j] ) /2  *  ( U[i][j] - U[i][j+1] )/2 - abs(V[i][j-1] + V[i+1][j-1])/2 * (U[i][j-1] - U[i][j])/2 ) ;
 
 				F[i][j] = U[i][j]  + dt * ( 1/Re * ( (d2udx2 ) + (d2udy2) ) - (du2dx)  - duvdy + GX ) ;
+
 			}
 			/*Determines the value of G according to the formula above with the help of temporary variables*/
 			if(((Flag[i][j]&B_C)==B_C||(Flag[i][j]&31)==B_W||(Flag[i][j]&31)== B_O ) && j<jmax ){
@@ -121,9 +122,7 @@ void calculate_fg(
 		}
 	}
 
-	/**
-	 * TODO HOULDN'T THESE VALUES BE SET TO 0???? WE ARE NOT INITIALIZING 0 0
-	 */
+
 	/*Set boundary values along the columns*/
 	for (j = 1; j <= jmax; j++){
 		/*F values on right and left boundaries*/
@@ -137,7 +136,6 @@ void calculate_fg(
 		G[i][0] = V[i][0];
 		G[i][jmax] = V[i][jmax];
 	}
-
 }
 
 /* ----------------------------------------------------------------------- */
@@ -190,7 +188,8 @@ void calculate_dt(
 		int imax,
 		int jmax,
 		double **U,
-		double **V
+		double **V,
+		int **Flag
 ) {
 	/*calculates maximum absolute velocities in x and y direction*/
 	double umax=0, vmax=0;
@@ -198,12 +197,14 @@ void calculate_dt(
 	int i, j;
 	for(i = 1; i <= imax; i++) {
 		for(j = 1; j<=jmax; j++) {
-			if(abs(U[i][j])>umax)
-				umax = abs(U[i][j]);
+			if((Flag[i][j]&B_C)==B_C){
+				if(abs(U[i][j])>umax)
+					umax = abs(U[i][j]);
 
-			if(abs(V[i][j])>vmax)
-				vmax = abs(V[i][j]);
+				if(abs(V[i][j])>vmax)
+					vmax = abs(V[i][j]);
 
+			}
 		}
 	}
 

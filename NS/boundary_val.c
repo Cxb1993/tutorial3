@@ -207,12 +207,7 @@ void spec_boundary_val(
 			V[0][j]= 0.0;
 		}
 	}
-	/*if(strcmp(problem,"PlaneShearFlow")==0){
-		for (j = 1; j < jmax + 1; j++){
-			U[0][j] = 0.0;
-			V[0][j]= 0.0;
-		}
-	}*/
+
 	if(strcmp(problem,"FlowOverStep")==0){
 		for (j = 1; j <= (jmax)/2; j++){
 			U[0][j] = 0.0;
