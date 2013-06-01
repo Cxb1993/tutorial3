@@ -90,7 +90,6 @@ int main(int argc, char** argv){
 	char problem[80];
 	int n_div;
 
-
 	/* read the program configuration file using read_parameters()*/
 	read_parameters(&Re, &UI, &VI, &PI, &GX, &GY, &t_end, &xlength, &ylength, &dt, &dx, &dy, &imax,
 			&jmax, &alpha, &omg, &tau, &itermax, &eps, &dt_value, &wl, &wr, &wt, &wb, problem, &lp, &rp, &dp,
@@ -113,10 +112,6 @@ int main(int argc, char** argv){
 	init_flag(problem, imax, jmax, lp, rp, dp, Flag);
 	init_uvp(UI, VI, PI, imax, jmax, U, V, P, Flag);
 
-	/*write_imatrix("Matrix.dat", Flag, 0, imax+1, 0, jmax+1, imax+1, jmax+1, 1);
-	write_matrix("Matrix.dat", U, 0, imax+1, 0, jmax+1,imax+1, jmax+1, 0);
-	write_matrix("Matrix.dat", V, 0, imax+1, 0, jmax+1, imax+1, jmax+1, 0);
-	write_matrix("Matrix.dat", P, 0, imax+1, 0, jmax+1, imax+1, jmax+1, 0);*/
 	/* ----------------------------------------------------------------------- */
 	/*                             Performing the main loop                    */
 	/* ----------------------------------------------------------------------- */
@@ -124,31 +119,15 @@ int main(int argc, char** argv){
 	/* Upperbound t_end+dt/10 to be sure that it runs for t=t_end */
 	while (t<t_end){
 		/*	Select dt*/
-		calculate_dt(Re, tau, &dt, dx, dy, imax, jmax, U, V);
+		calculate_dt(Re, tau, &dt, dx, dy, imax, jmax, U, V, Flag);
 		/*	Set boundary values for u and v according to (14),(15)*/
 		boundaryvalues(imax, jmax, U, V, wl, wr, wt, wb, Flag);
 		/*  Set special boundary values according to the problem*/
 		spec_boundary_val(problem, imax, jmax, U, V);
-		if(t==2*dt){
-			write_matrix("Matrix.dat", U, 0, imax+1, 0, jmax+1,imax+1, jmax+1, 1);
-			write_matrix("Matrix.dat", V, 0, imax+1, 0, jmax+1, imax+1, jmax+1, 0);
-			write_matrix("Matrix.dat", P, 0, imax+1, 0, jmax+1, imax+1, jmax+1, 0);
-		}
 		/*	Compute F(n) and G(n) according to (9),(10),(17)*/
 		calculate_fg(Re, GX, GY, alpha, dt, dx, dy, imax, jmax, U, V ,F , G, Flag);
-		if(t==2*dt){
-			write_matrix("Matrix.dat", F, 0, imax+1, 0, jmax+1,imax+1, jmax+1, 0);
-			write_matrix("Matrix.dat", G, 0, imax+1, 0, jmax+1, imax+1, jmax+1, 0);
-		}
 		/*	Compute the right-hand side rs of the pressure equation (11)*/
 		calculate_rs(dt, dx, dy, imax, jmax, F, G, RS);
-		if(t==2*dt){
-			printf("dt = %f, dx = %f, dy = %f\n", dt, dx, dy);
-			write_matrix("Matrix.dat", F, 0, imax+1, 0, jmax+1,imax+1, jmax+1, 0);
-			write_matrix("Matrix.dat", G, 0, imax+1, 0, jmax+1, imax+1, jmax+1, 0);
-			write_matrix("Matrix.dat", RS, 0, imax+1, 0, jmax+1, imax+1, jmax+1, 0);
-		}
-
 		/*	Set it := 0*/
 		res = 1.0;
 		it = 0;
@@ -163,12 +142,6 @@ int main(int argc, char** argv){
 		/*	Compute u(n+1) and v(n+1) according to (7),(8)*/
 		calculate_uv(dt, dx, dy, imax, jmax, U, V, F, G, P, Flag);
 		/*	Output of u; v; p values for visualization, if necessary*/
-		if(t==2*dt){
-			write_matrix("Matrix.dat", U, 0, imax+1, 0, jmax+1,imax+1, jmax+1, 0);
-			write_matrix("Matrix.dat", V, 0, imax+1, 0, jmax+1, imax+1, jmax+1, 0);
-			write_matrix("Matrix.dat", P, 0, imax+1, 0, jmax+1, imax+1, jmax+1, 0);
-		}
-
 
 		n_div=(int)(dt_value/dt);
 		if(n % n_div == 0){

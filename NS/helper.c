@@ -318,9 +318,9 @@ void write_imatrix( const char* szFileName,       /* filename */
 
     }
 
-    for( j = ncl; j <= nch; j++){
-        for( i = nrl; i <= nrh; i++){
-                    fprintf(fh, " %i ", (int)m[i][j]);
+    for( j = nch; j >= ncl; j--){
+            for( i = nrl; i <= nrh; i++){
+                            fprintf(fh, " %i ", (int)m[i][j]);
             }
                 fprintf(fh, "\n");
         }

@@ -63,7 +63,7 @@ void calculate_fg(
 	{
 		for( j = 1 ; j <= jmax ; j++ )
 		{
-			if(((Flag[i][j]&B_C)==B_C||(Flag[i][j]&31)==B_N||(Flag[i][j]&31)== B_S )&& i<imax ){
+			if(((Flag[i][j]&B_C)==B_C)&& i<imax ){
 				d2udx2 = ( U[i+1][j]  - 2*U[i][j] + U[i-1][j] ) / ( dx * dx) ;
 
 				d2udy2 = ( U[i][j+1]  - 2*U[i][j] + U[i][j-1]) / (dy * dy )  ;
@@ -78,7 +78,7 @@ void calculate_fg(
 
 			}
 			/*Determines the value of G according to the formula above with the help of temporary variables*/
-			if(((Flag[i][j]&B_C)==B_C||(Flag[i][j]&31)==B_W||(Flag[i][j]&31)== B_O ) && j<jmax ){
+			if(((Flag[i][j]&B_C)==B_C) && j<jmax ){
 				d2vdx2 = ( V[i+1][j]  - 2*V[i][j] + V[i-1][j] ) / ( dx * dx) ;
 
 				d2vdy2 = ( V[i][j+1]  - 2*V[i][j] + V[i][j-1]) / (dy * dy )  ;
