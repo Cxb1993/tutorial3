@@ -124,7 +124,7 @@ int main(int argc, char** argv){
 	/* Upperbound t_end+dt/10 to be sure that it runs for t=t_end */
 	while (t<t_end){
 		/*	Select dt*/
-		calculate_dt(Re, tau, &dt, dx, dy, imax, jmax, U, V);
+		calculate_dt(Re, tau, &dt, dx, dy, imax, jmax, U, V, Flag);
 		/*	Set boundary values for u and v according to (14),(15)*/
 		boundaryvalues(imax, jmax, U, V, wl, wr, wt, wb, Flag);
 		/*  Set special boundary values according to the problem*/
