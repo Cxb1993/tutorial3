@@ -205,6 +205,14 @@ void init_flag(
 	/* Outer boundaries will always be the same, so we assign those flags first*/
 	/* Corners: */
 	init_imatrix(Flag, 0, imax, 0, jmax, 0);
+    
+    
+    /*Initialize corners*/
+	Flag[0][0]=0;
+	Flag[0][jmax+1]=0;
+	Flag[imax+1][0]=0;
+	Flag[imax+1][jmax+1]=0;
+	
 	/* Left boundary: */
 	for(j = 1; j < jmax + 1; j++){
 		if((temp[1][j] & B_C)){
