@@ -31,7 +31,9 @@ void boundaryvalues(
 	V[imax+1][0]=0.0;
 	V[imax+1][jmax+1]=0.0;
 
-	/*Set values for the left boundary*/
+	/* Set values for all the outside boundary depending on the value that
+	 * the data file is set to. NO_SLIP = 1, FREE_SLIP=2 and OUTFLOW=3
+	 * We start with the left boundary. */
 	switch(wl){
 	case NO_SLIP:
 		for (j = 1; j < jmax + 1; j++){
@@ -134,7 +136,8 @@ void boundaryvalues(
 	}
 
 	/**
-	 * Loop to check for boundary cells in the inner domain
+	 * Loop to check for boundary cells in the inner domain, and assign
+	 * correct values of U and V.
 	 */
 	for(i = 1; i < imax+1; i++){
 		for(j = 1; j < jmax+1; j++){
@@ -195,19 +198,28 @@ void spec_boundary_val(
 		double **V
 ){
 	int i,j;
+	/**
+	 * Special boundary condition for the cavity problem.
+	 */
 	if(strcmp(problem,"cavity")==0){
 		for (i = 1; i < imax + 1; i++){
 			V[i][jmax] = 0;
 			U[i][jmax+1]= 2.0-1*U[i][jmax];
 		}
 	}
+	/*
+	 * Special boundary condition for the Karman Vortex street
+	 * problem
+	 */
 	if(strcmp(problem,"KarmanVortexStreet")==0){
 		for (j = 1; j < jmax + 1; j++){
 			U[0][j] = 1.0;
 			V[0][j]= 0.0;
 		}
 	}
-
+	/*
+	 * Special boundary condition for the Flow Over Step problem
+	 */
 	if(strcmp(problem,"FlowOverStep")==0){
 		for (j = 1; j <= (jmax)/2; j++){
 			U[0][j] = 0.0;

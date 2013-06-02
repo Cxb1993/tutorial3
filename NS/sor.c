@@ -26,11 +26,21 @@ void sor(
 	/* SOR iteration */
 	for(i = 1; i <= imax; i++) {
 		for(j = 1; j<=jmax; j++) {
+			/*
+			 * Check if it is a fluid cell and calculate the pressure normally
+			 */
 			if((Flag[i][j]&B_C)==B_C){
 				P[i][j] = (1.0-omg)*P[i][j] + coeff*(( P[i+1][j]+P[i-1][j])/(dx*dx) +
 						( P[i][j+1]+P[i][j-1])/(dy*dy) - RS[i][j]);
+				/*
+				 * Store number of fluid cells
+				 */
 				count++;
 			}
+			/*
+			 * If it's not a fluid cell but it has fluid cell neighbors, some values must still
+			 * be calculated using the boundary flags.
+			 */
 			else if((Flag[i][j]&31)==B_N){
 				P[i][j]=P[i][j+1];
 			}
@@ -59,14 +69,15 @@ void sor(
 	}
 
 
-	/* set boundary values */
+	/* set outer boundary values */
 			for(i = 1; i <= imax; i++) {
 
 				P[i][0] = P[i][1];
 				P[i][jmax+1] = P[i][jmax];
 			}
 			for(j = 1; j <= jmax; j++) {
-				/*left*/
+				/*left boundary (this can be modified if a pressure value must be assigned to
+				 * this boundary) */
 
 				if((Flag[0][j]&P_L)==P_L){
 					if(lp>=0){
@@ -79,7 +90,8 @@ void sor(
 				else{
 					P[0][j] = P[1][j];
 				}
-				/*right*/
+				/*right (this can be modified if a pressure value must be assigned to
+				 * this boundary)*/
 
 				if((Flag[imax+1][j]&P_R)==P_R){
 					if(rp>=0){
@@ -98,12 +110,18 @@ void sor(
 	rloc = 0.0;
 	for(i = 1; i <= imax; i++) {
 		for(j = 1; j <= jmax; j++) {
+			/*
+			 * Check for only fluid cells
+			 */
 			if((Flag[i][j]&B_C)==B_C){
 				rloc += ( (P[i+1][j]-2.0*P[i][j]+P[i-1][j])/(dx*dx) + ( P[i][j+1]-2.0*P[i][j]+P[i][j-1])/(dy*dy) - RS[i][j])*
 						( (P[i+1][j]-2.0*P[i][j]+P[i-1][j])/(dx*dx) + ( P[i][j+1]-2.0*P[i][j]+P[i][j-1])/(dy*dy) - RS[i][j]);
 			}
 		}
 	}
+	/*
+	 * Calculate the residual by dividing only by the number of fluid cells!
+	 */
 	rloc = rloc/((double)count);
 	rloc = sqrt(rloc);
 	/* set residual */

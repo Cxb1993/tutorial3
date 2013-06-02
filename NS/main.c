@@ -6,7 +6,7 @@
 #include "sor.h"
 #include <stdio.h>
 
-/* CFD Lab - Worksheet 1 - Group 3
+/* CFD Lab - Worksheet 3 - Group 3
  * Camacho Barranco, Roberto
  * Gavranovic, Stefan
  * Valizadeh, Mahyar
@@ -86,7 +86,7 @@ int main(int argc, char** argv){
 	int wb;				/* boundary type for bottom wall (1:no-slip 2: free-slip 3: outflow) */
 	double lp;			/* pressure in left boundary */
 	double rp;			/* pressure in right boundary */
-	double dp;          /* change in pressure */
+	double dp;          /* change in pressure with right boundary = 0 */
 	char problem[80];
 	int n_div;
 

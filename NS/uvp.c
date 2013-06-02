@@ -63,6 +63,9 @@ void calculate_fg(
 	{
 		for( j = 1 ; j <= jmax ; j++ )
 		{
+			/*
+			 * We need to check that the cell is actually a fluid cell.
+			 */
 			if(((Flag[i][j]&B_C)==B_C)&& i<imax ){
 				d2udx2 = ( U[i+1][j]  - 2*U[i][j] + U[i-1][j] ) / ( dx * dx) ;
 
@@ -91,6 +94,10 @@ void calculate_fg(
 
 				G[i][j] = V[i][j]  + dt * ( 1/Re * ( (d2vdx2 ) + (d2vdy2) ) - (duvdx)  - dv2dy + GY ) ;
 			}
+			/*
+			 * In case its a boundary cell, then we check it by comparing the flags and calculate
+			 * only the useful values of F and G.
+			 */
 			if((Flag[i][j]&31)==B_N){
 				G[i][j]=V[i][j];
 			}
@@ -259,6 +266,9 @@ void calculate_uv(
 	int j;
 	for(i = 1; i <= imax; i++){
 		for(j = 1; j <= jmax; j++){
+			/*
+			 * Check that the cell is a fluid cell.
+			 */
 			if((Flag[i][j]&B_C)==B_C){
 				/*Calculate the new velocity U according to the formula above*/
 				if(i<imax){

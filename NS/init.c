@@ -42,6 +42,7 @@
  *                   write into the output file)
  * @param wl,wr,wt,wb boundary type
  * @param problem	 define problem to be solved
+ * @param lp, rp, dp defines values of pressure at the left and right boundary, or the difference keeping right constant.
  * @param argv		 input argument for the problem
  * @param argc		 count there is only one input 
  */
@@ -160,6 +161,9 @@ void init_uvp(
 	{
 		for (j = 0; j<= jmax+1; j++ )
 		{
+			/*
+			 * Initialize fluid cells with the values from the data file
+			 */
 			if((Flag[i][j]&B_C)==B_C){
 				U[i][j] = UI ;
 				V[i][j] = VI ;
@@ -218,6 +222,11 @@ void init_flag(
 		if((temp[1][j] & B_C)){
 			Flag[0][j] = B_O;
 		}
+		/*
+		 * In case there is a value for the pressure that should be assigned in the left boundary
+		 * set the P_L flag to 1. In this case it could be directly because of lp being defined or
+		 * dp not equal 0.
+		 */
 		if(lp>=0||dp!=0){
 			Flag[0][j]|= P_L;
 		}
@@ -228,6 +237,9 @@ void init_flag(
 		if((temp[imax][j] & B_C)){
 			Flag[imax+1][j] = B_W;
 		}
+		/*
+		 * Set flag P_R if pressure value at right boundary is defined
+		 */
 		if(rp>=0||dp!=0){
 			Flag[imax+1][j]|= P_R;
 		}
@@ -246,7 +258,10 @@ void init_flag(
 		}
 	}
 
-	/* Now loop over all inner cells checking the four neighbors (no corners)*/
+	/*
+	 * Now loop over all inner cells checking the four neighbors (no corners)
+	 * and check if it is a fluid cell and set the flags for the neighboring cells
+	 * */
 	for(i = 1; i < imax + 1; i++){
 		for(j = 1; j < jmax + 1; j++){
 			if(temp[i][j]==C_F){
@@ -267,6 +282,9 @@ void init_flag(
 			if((temp[i][j-1]&B_C)==B_C||(temp[i][j-1]&C_F)==C_F){
 				Flag[i][j] |= B_S;
 			}
+			/*
+			 * This is a check for possible forbidden boundaries.
+			 */
 			if((Flag[i][j]&31)==3||(Flag[i][j]&31)==7||((Flag[i][j]&31)>10&&(Flag[i][j]&31)<16)){
 				printf("\nERROR! The flag field contains a forbidden boundary cell at i= %i j= %i\n",i,j);
 			}
