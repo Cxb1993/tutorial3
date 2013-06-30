@@ -38,7 +38,10 @@ void write_vtkFile(const char *szProblem,
     fprintf(fp, "VECTORS velocity float\n");
     for(j = 0; j < jmax+1; j++) {
         for(i = 0; i < imax+1; i++) {
-            fprintf(fp, "%f %f 0\n", (U[i][j] + U[i][j+1]) * 0.5, (V[i][j] + V[i+1][j]) * 0.5 );
+            if ( ( (Flag[i][j] | Flag[i][j+1] | Flag[i+1][j] | Flag[i+1][j+1]) & B_C) == B_C) 
+				fprintf(fp, "%f %f 0\n", (U[i][j] + U[i][j+1]) * 0.5, (V[i][j] + V[i+1][j]) * 0.5 ); 
+			else 
+				fprintf(fp, "0 0 0\n"); 
         }
     }
     
