@@ -145,7 +145,7 @@ int main(int argc, char** argv){
 
 		n_div=(int)(dt_value/dt);
 		if(n % n_div == 0){
-			write_vtkFile(problem, n , xlength, ylength, imax, jmax, dx, dy, U, V, P);
+			write_vtkFile(problem, n , xlength, ylength, imax, jmax, dx, dy, U, V, P, Flag);
 		}
 		/*	t := t + dt*/
 		t = t + dt;
